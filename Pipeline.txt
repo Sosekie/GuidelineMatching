@@ -1,0 +1,4 @@
+1. use LLM to convert both guidelines (one sentence one paragraph) and text (whole document) to embedding;
+2. compute cosine similarity on a case-by-case basis(option: directly using LLM to compute similarity);
+3. extract the top 20% of document fragments corresponding to each guideline;
+4. ChatGPT checks whether the guideline and the selected batch of documents are related (one-to-many).
