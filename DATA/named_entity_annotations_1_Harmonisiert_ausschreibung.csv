@@ -1,0 +1,54 @@
+criterion_id,criterion_type,text
+food-K-019,cc-selection_criteria,"Sie verwenden Öle, Gewürze, Streusalze, Zucker, Backwaren, wie auch weitere Basisprodukte 
+und Nahrungsmittel für die Zwischenmahlzeiten zu 50% (an Kosten gemessen) in der Qualität 
+«Bio» und (bei Produkten aus der 3. Welt) mit dem Gütesiegel «Max Havelaar»."
+food-K-019,cc-technical_specification,"Sie verwenden Milch und Milchprodukte zu 90% (gemessen an den Kosten) aus Schweizer 
+Produktion in der Qualität «Bio»."
+food-K-027,cc-technical_specification,"Sie verwenden Milch und Milchprodukte zu 90% (gemessen an den Kosten) aus Schweizer 
+Produktion in der Qualität «Bio»."
+food-K-041,cc-selection_criteria,"Sie verwenden Milch und Milchprodukte zu 90% (gemessen an den Kosten) aus Schweizer 
+Produktion in der Qualität «Bio»."
+food-K-019,cc-selection_criteria,"Sie produzieren Sättigungsbeilagen zu 80% (in 8 von 10 Mahlzeiten) in der Qualität «Bio» und 
+verwenden (bei Produkten aus der 3 Welt) Produkte mit dem Gütesiegel «Max Havelaar». 
+Kartoffeln verwenden Sie ausschliesslich in der Qualität «Bio Suisse» aus der Region (35km 
+von Biel)."
+food-K-041,,"Kartoffeln verwenden Sie ausschliesslich in der Qualität «Bio Suisse» aus der Region (35km 
+von Biel)."
+food-K-041,cc-technical_specification,"Früchte verarbeiten und liefern Sie zu 80% (gemessen an den Kosten) in Qualität «Bio Suis-
+se» (Siehe Ausnahmen unter g)."
+food-K-019,cc-selection_criteria,"Früchte verarbeiten und liefern Sie zu 80% (gemessen an den Kosten) in Qualität «Bio Suis-
+se» (Siehe Ausnahmen unter g)."
+food-K-019,cc-technical_specification,"Fruchtsäfte verarbeiten und liefern Sie zu 80% (gemessen an den Kosten) in der Qualität 
+«Bio»"
+food-K-041,cc-selection_criteria,"Sie liefern und verarbeiten zu 80% Früchte (gemessen an den Kosten) aus der Region (35km 
+von Biel)."
+food-K-024,cc-selection_criteria,"Ausnahmen: Bananen, Mandarinen, Clementinen, Orangen: Diese sollen zu 70% (Gemessen 
+an den Kosten) aus fairem Handel (Label Max Havelaar oder vergleichbar) und wenn möglich 
+aus biologischer Produktion stammen."
+food-K-019,cc-selection_criteria,Sie verwenden zu 70% Gemüse (gemessen an den Kosten) in der Qualität «Bio Suisse».
+food-K-041,cc-technical_specification,Sie verwenden zu 70% Gemüse (gemessen an den Kosten) in der Qualität «Bio Suisse».
+food-K-041,cc-selection_criteria,Sie verwenden zu 70% Gemüse (gemessen an den Kosten) aus der Region (35km von Biel).
+food-K-019,cc-selection_criteria,Sie verwenden Salat ausschliesslich in der Qualität «Bio Suisse».
+food-K-041,cc-selection_criteria,Sie verwenden zu 70% Salat (gemessen an den Kosten) aus der Region (35km von Biel).
+food-K-029,cc-selection_criteria,"Fleisch/Geflügel in der Qualität «IP» oder «Bio Suisse» aus der Region (35km von 
+Biel)"
+food-K-025,cc-selection_criteria,"Fleisch/Geflügel in der Qualität «IP» oder «Bio Suisse» aus der Region (35km von 
+Biel)"
+food-K-019,cc-selection_criteria,"Fleisch/Geflügel in der Qualität «IP» oder «Bio Suisse» aus der Region (35km von 
+Biel)"
+food-K-041,cc-selection_criteria,"Fleisch/Geflügel in der Qualität «IP» oder «Bio Suisse» aus der Region (35km von 
+Biel)"
+food-K-022,cc-selection_criteria,"Fleisch/Geflügel in der Qualität «IP» oder «Bio Suisse» aus der Region (35km von 
+Biel)"
+food-K-028,cc-selection_criteria,"Fleisch/Geflügel in der Qualität «IP» oder «Bio Suisse» aus der Region (35km von 
+Biel)"
+food-K-026,cc-selection_criteria,"Fleisch/Geflügel in der Qualität «IP» oder «Bio Suisse» aus der Region (35km von 
+Biel)"
+food-K-023,cc-selection_criteria,Fisch im Standard «MSC»
+food-K-036,cc-selection_criteria,Fisch im Standard «MSC»
+food-K-005,cc-selection_criteria,3 Hauptmahlzeiten pro Woche vegetarisch
+food-K-002,cc-selection_criteria,"Für Kinder die vegetarisch oder kein Schweinefleisch essen wird jeden Tag eine Ei-
+weisskomponente auf vegetarischer Basis angeboten."
+food-K-047,cc-award_criterion,"Ausgewogenheit und kindergerecht innerhalb der Menüs: Die Produktion folgt einer 
+Ernährungsphilosophie auf Basis einer aktuellen wissenschaftlicher Grundlage. 
+Geben Sie Ihre Philosophie an"
