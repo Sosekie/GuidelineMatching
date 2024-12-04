@@ -5,6 +5,9 @@
 3. 
 
 
+## GPT API
+* [Prompt engineering](https://platform.openai.com/docs/guides/prompt-engineering#tactic-use-embeddings-based-search-to-implement-efficient-knowledge-retrieval)
+
 ## Project Reports
 * The report should be between 4 to 8 pages long
 * Please use the following [LaTeX template](https://www.overleaf.com/latex/templates/project-report/jpzczmpsdzwm)
