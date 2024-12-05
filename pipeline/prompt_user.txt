@@ -1,0 +1,9 @@
+Reference Text
+"The catering company provides at least 50% vegetarian dishes every day."
+
+Candidate Texts
+"The catering company's menu contains at least half of the dishes as vegetarian every day."
+"This catering company guarantees a diverse range of vegetarian options every day, including tofu and vegetables."
+"The catering company provides 50 vegetarian dishes every day, of which 20 are organic."
+"This company focuses on providing healthy food, especially gluten-free and low-fat options."
+"40% of the dishes provided by the catering company every day are vegetarian, while 60% are non-vegetarian."
