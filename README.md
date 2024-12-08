@@ -1,9 +1,19 @@
 # GuidelineMatching
+## Experiment
+**Baseline**: GPT
+**Pipeline 1**: cosine similarity
+**Pipeline 2**: cosine similarity + Cross encoder re-ranking 
+**Pipeline 3**: cosine similarity + GPT re-ranking 
+**Pipeline 4**: cosine similarity + (Chain of Thought) GPT re-ranking
+**Pipeline 5**: cosine similarity + (Few-shot) GPT re-ranking
+**Pipeline 6**: cosine similarity + (Chain of Thought + Few-shot) GPT re-ranking
 
-1. input: guideline-text to model to compute similarity.
-2. choose top likely texts(20%) and see whether it match guideline or not.
-3. 
+### Ablation Study
+* Similarity threshold
 
+### Evaluation 
+* Recall@k
+* Runtime
 
 ## GPT API
 * [Prompt engineering](https://platform.openai.com/docs/guides/prompt-engineering#tactic-use-embeddings-based-search-to-implement-efficient-knowledge-retrieval)
