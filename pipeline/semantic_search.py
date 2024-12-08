@@ -85,8 +85,8 @@ while True:
     question_embedding = model.encode(inp_question, convert_to_tensor=True)
     hits = util.semantic_search(question_embedding, corpus_embeddings)
     end_time = time.time()
-    hits = hits[0]  # Get the hits for the first query
-
+    hits = hits[0]  # Get the hits fr the first query
+    
     print(f"The length of hits: {len(hits)}")
 
     print("Input question:", inp_question)

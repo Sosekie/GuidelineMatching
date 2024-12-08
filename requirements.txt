@@ -1,0 +1,12 @@
+dkpro-cassis 
+pdfplumber 
+PyMuPDF 
+stanza
+torch 
+tensorflow 
+sentencepiece 
+transformers
+sentence_transformers
+openpyxl
+tf_keras
+openai==0.28

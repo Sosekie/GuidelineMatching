@@ -1,12 +1,14 @@
 # GuidelineMatching
+
 ## Experiment
-* **Baseline**: GPT
-* **Pipeline 1**: cosine similarity
-* **Pipeline 2**: cosine similarity + Cross encoder re-ranking 
-* **Pipeline 3**: cosine similarity + GPT re-ranking 
-* **Pipeline 4**: cosine similarity + (Chain of Thought) GPT re-ranking
-* **Pipeline 5**: cosine similarity + (Few-shot) GPT re-ranking
-* **Pipeline 6**: cosine similarity + (Chain of Thought + Few-shot) GPT re-ranking
+
+- [√] **Baseline**: GPT  
+- [√] **Pipeline 1**: cosine similarity  
+- [√] **Pipeline 2**: cosine similarity + Cross encoder re-ranking  
+- [ ] **Pipeline 3**: cosine similarity + GPT re-ranking  
+- [ ] **Pipeline 4**: cosine similarity + (Chain of Thought) GPT re-ranking  
+- [ ] **Pipeline 5**: cosine similarity + (Few-shot) GPT re-ranking  
+- [ ] **Pipeline 6**: cosine similarity + (Chain of Thought + Few-shot) GPT re-ranking
 
 ### Ablation Study
 * Similarity threshold
