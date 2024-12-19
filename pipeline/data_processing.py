@@ -1,7 +1,6 @@
 import os
 import pandas as pd
-
-def load_and_process_data(excel_path, csv_paths):
+def load_and_process_data(excel_path, csv_path):
     """
     Load and process data from Excel and multiple CSV files.
 
@@ -15,13 +14,13 @@ def load_and_process_data(excel_path, csv_paths):
             - requirements (list): List of sentences (requirements) from the combined CSV files.
     """
     # Load and process Excel data
-    data = pd.read_excel(excel_path, usecols=["Kategorie Kriterium", "Ausschreibungskriterium"])
+    data = pd.read_excel(excel_path, usecols=[ "Ausschreibungskriterium"])
     guidelines = data.apply(lambda row: " ".join(row.dropna().astype(str)), axis=1).tolist()
 
     # Load and combine CSV data
-    dataframes = [pd.read_csv(file_path) for file_path in csv_paths]
+    dataframes = [pd.read_csv(csv_path)]
     combined_df = pd.concat(dataframes, ignore_index=True)
-    requirements = combined_df["text"].tolist()
+    requirements = combined_df["sentence"].tolist()
 
     return guidelines, requirements
 
