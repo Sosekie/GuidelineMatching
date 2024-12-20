@@ -16,11 +16,11 @@ with open('question.txt', 'r', encoding='utf-8') as file:
 client = OpenAI()
 
 completion = client.chat.completions.create(
-    model="gpt-4o-mini",
+    model="gpt-4o",
     messages=[
         {"role": "system", "content": system_content},
-        {"role": "user", "content": user_content},
-        {"role": "assistant", "content": assistant_content},
+        # {"role": "user", "content": user_content},
+        # {"role": "assistant", "content": assistant_content},
         {
             "role": "user",
             "content": question_content
@@ -29,3 +29,5 @@ completion = client.chat.completions.create(
 )
 
 print(completion.choices[0].message.content)
+
+print(completion.choices[0].message.content[-1])

@@ -1,29 +1,28 @@
 import os
 import pandas as pd
 
-def load_and_process_data(excel_path, csv_paths):
+def load_and_process_data(excel_path, csv_path):
     """
     Load and process data from Excel and multiple CSV files.
 
     Args:
         excel_path (str): Path to the Excel file.
-        csv_paths (list): List of paths to the CSV files.
+        csv_path (str): Path to the CSV file.
 
     Returns:
         tuple: A tuple containing:
-            - guidelines (list): List of combined texts (guidelines) from the Excel file.
-            - requirements (list): List of sentences (requirements) from the combined CSV files.
+            - guidelines (list): List of guidelines from the Excel file.
+            - sentences (list): List of sentences from the combined CSV files.
     """
-    # Load and process Excel data
-    data = pd.read_excel(excel_path, usecols=["Kategorie Kriterium", "Ausschreibungskriterium"])
-    guidelines = data.apply(lambda row: " ".join(row.dropna().astype(str)), axis=1).tolist()
+    # Load Excel data
+    data = pd.read_excel(excel_path, usecols=["Ausschreibungskriterium"])
+    guidelines = data["Ausschreibungskriterium"].dropna().astype(str).tolist()
 
     # Load and combine CSV data
-    dataframes = [pd.read_csv(file_path) for file_path in csv_paths]
-    combined_df = pd.concat(dataframes, ignore_index=True)
-    requirements = combined_df["text"].tolist()
+    data = pd.read_csv(csv_path, usecols=["sentence"])
+    sentences = data["sentence"].dropna().astype(str).tolist()
 
-    return guidelines, requirements
+    return guidelines, sentences
 
 
 def ensure_directories_exist(directories):

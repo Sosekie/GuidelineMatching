@@ -1,34 +1,26 @@
-def recall_n(matched_sentences, target, n=5):
-    """
-    This function calculates the recall score for matched sentences against target sentences.
-    
-    Args:
-        matched_sentences (list, shape [number of queries, 10]): A list where each element is a list of 10 matched sentences for a query.
-        target (list, shape [number of queries, 1]): A list where each element is a list containing the target sentence for a query.
-        n (int): The number of top sentences to consider for matching (between 1 and 10).
-    
-    Returns:
-        float: The average recall score, calculated as the number of queries where the target sentence is found in the top n matched sentences divided by the total number of queries.
-    """
+import numpy as np
+
+
+def recall_k(matched_matrix, target_matrix, k=10):
+
     # Ensure n is within the valid range
-    if not (1 <= n <= 10):
-        raise ValueError("n must be between 1 and 10")
+    if not (7 <= k <= 20):
+        raise ValueError("n must be between 7 and 20")
     
-    total_queries = len(matched_sentences)
-    total_score = 0
+    M, N = matched_matrix.shape
+    recall_matrix = np.zeros((M, N), dtype="int")
     
-    # Iterate through each query's matched_sentences and target
-    for i in range(total_queries):
-        # Get the top n sentences for the current query
-        top_n_sentences = matched_sentences[i][:n]
-        # Get the corresponding target sentence
-        target_sentence = target[i][0]
-        
-        # If target_sentence is in the top n sentences, score is 1
-        if target_sentence in top_n_sentences:
-            total_score += 1
+    # Construct recall_matrix based on the top-n values per row
+    for i in range(M):
+        # Get the indices of the top-n values in the row
+        top_n_indices = np.argsort(matched_matrix[i])[-k:]  # Indices of the top-n largest values
+        recall_matrix[i, top_n_indices] = 1  # Set those positions to 1
+
+    for i in range(M): 
+        total_match = np.sum(target_matrix[i])
+        total_score = np.sum(recall_matrix[i] & target_matrix[i]) / total_match
     
     # Calculate the average score
-    recall_score = total_score / total_queries
+    recall_score = total_score / N
     
     return recall_score

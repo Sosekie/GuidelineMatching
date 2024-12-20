@@ -1,9 +1,0 @@
-Reference Text
-"The oven should be turned off if left idle for more than 20 minutes to save energy consumption."
-
-Candidate Texts
-"The oven should be turned off promptly after use to avoid unnecessary energy waste."
-"Please disconnect the microwave after use to save power."
-"If the oven is idle for more than 15 minutes, the system will automatically remind the user to consider turning it off."
-"To save energy, the company requires all appliances to be unplugged when not in use."
-"The oven will automatically enter energy-saving mode if idle for more than 30 minutes."
