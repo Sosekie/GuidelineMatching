@@ -51,7 +51,7 @@ def gpt_baseline_search(guidelines, sentences, model_name="gpt-4o-mini"):
     return matching_matrix
 
 
-def run_baseline(file_path_excel, file_paths_csv, result_path, model_name="gpt-4", top_k=10):
+def run_baseline(file_path_excel, file_paths_csv, result_path, model_name="gpt-4o-mini"):
     """
     Run the GPT baseline for semantic search.
 
@@ -60,7 +60,6 @@ def run_baseline(file_path_excel, file_paths_csv, result_path, model_name="gpt-4
         file_paths_csv (list): List of CSV file paths containing requirements.
         result_path (str): Path to save results.
         model_name (str): The GPT model to use.
-        top_k (int): Number of top matches to retrieve.
 
     Returns:
         None
@@ -69,22 +68,15 @@ def run_baseline(file_path_excel, file_paths_csv, result_path, model_name="gpt-4
     ensure_directories_exist(["result"])
 
     # Load and process data
-    guidelines, requirements = load_and_process_data(file_path_excel, file_paths_csv)
+    guidelines, sentences = load_and_process_data(file_path_excel, file_paths_csv)
 
     # Perform GPT-based semantic search
     print("Performing GPT-based semantic search...")
     start_time = time.time()
-    gpt_results = gpt_baseline_search(guidelines, requirements, model_name=model_name)
+    matching_matrix = gpt_baseline_search(guidelines, sentences, model_name=model_name)
     elapsed_time = time.time() - start_time
     print(f"GPT-based semantic search completed in {elapsed_time:.2f} seconds.")
 
-    # Save results to CSV
-    results_list = []
-    for result in gpt_results:
-        query = result["query"]
-        for idx, match in enumerate(result["matches"][:top_k]):
-            results_list.append({"query": query, "matched_text": match["text"], "rank": idx + 1})
-
-    results_df = pd.DataFrame(results_list)
-    results_df.to_csv(result_path, index=False)
+    # Save results to npy
+    np.save(result_path, matching_matrix)
     print(f"Results saved to '{result_path}'.")
