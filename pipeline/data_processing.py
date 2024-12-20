@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 
+
 def load_and_process_data(excel_path, csv_path):
     """
     Load and process data from Excel and multiple CSV files.
