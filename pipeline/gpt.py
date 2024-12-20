@@ -19,8 +19,8 @@ completion = client.chat.completions.create(
     model="gpt-4o",
     messages=[
         {"role": "system", "content": system_content},
-        # {"role": "user", "content": user_content},
-        # {"role": "assistant", "content": assistant_content},
+        {"role": "user", "content": user_content},
+        {"role": "assistant", "content": assistant_content},
         {
             "role": "user",
             "content": question_content

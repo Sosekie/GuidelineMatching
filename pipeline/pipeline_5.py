@@ -12,8 +12,14 @@ client = openai.AsyncOpenAI(
     api_key = "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"
 )
 
-with open('prompts/prompt_system.txt', 'r', encoding='utf-8') as file:
+with open('prompts/prompt_system_cot.txt', 'r', encoding='utf-8') as file:
     system_content = file.read()
+
+with open('prompts/prompt_user.txt', 'r', encoding='utf-8') as file:
+    user_content = file.read()
+
+with open('prompts/prompt_assistant.txt', 'r', encoding='utf-8') as file:
+    assistant_content = file.read()
 
 
 def bi_encoder_retrieve(model, queries, corpus_embeddings, corpus_texts, top_k=10):
@@ -49,6 +55,7 @@ def get_gpt_result(response_content):
 
     for char in reversed(response_content[-20:]):
         if char == '"':  # stop when meet "
+            print(f"not the right format: {response_content[-20:]}")
             return 0
         if char.isdigit():  # return number
             return int(char)
@@ -63,12 +70,14 @@ async def fetch_response(sentence, guideline, model_name):
             model=model_name,
             messages=[
                 {"role": "system", "content": system_content},
+                {"role": "user", "content": user_content},
+                {"role": "assistant", "content": assistant_content},
                 {"role": "user", "content": question_content},
             ]
         )
         result = get_gpt_result(response.choices[0].message.content)  # 假设返回值是"0"或"1"
         return result
-    
+
     except Exception as e:
         print(f"Error processing sentence '{sentence}' with guideline '{guideline}': {e}")
         return 0  # 默认返回0表示不匹配
@@ -86,8 +95,8 @@ async def batched_requests(tasks, batch_size):
         print(f"Completed in {elapsed_time:.2f} seconds.")
         
         # 如果完成时间小于指定间隔，等待剩余时间
-        if elapsed_time < 30:
-            wait_time = 30 - elapsed_time
+        if elapsed_time < 60:
+            wait_time = 60 - elapsed_time
             print(f"Waiting for {wait_time:.2f} seconds before starting the next batch.")
             await asyncio.sleep(wait_time)
 
@@ -112,7 +121,7 @@ async def main(sentences, guidelines, bi_matrix, model_name):
                 indices.append((i, j))
 
     # 批量执行 fetch_response，限制每批任务数量为 batch_size
-    batch_size = 200
+    batch_size = 50
     task_results = await batched_requests(tasks, batch_size)
 
     # 将结果填充到对应的矩阵位置
@@ -123,7 +132,7 @@ async def main(sentences, guidelines, bi_matrix, model_name):
 
 
 # 运行程序
-def run_pipeline_3(file_path_excel, file_paths_csv, embedding_cache_path, result_path, gpt_model_name):
+def run_pipeline_5(file_path_excel, file_paths_csv, embedding_cache_path, result_path, gpt_model_name):
 
     # Ensure directories exist
     ensure_directories_exist(["embedding", "result"])

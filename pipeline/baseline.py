@@ -1,35 +1,27 @@
 import os
 import pandas as pd
 import time
+import difflib
 import openai
+import numpy as np
 from pipeline.data_processing import load_and_process_data, ensure_directories_exist
 
 import openai
 import os
 
 # Set the API key directly
-openai.api_key = "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"
+openai.api_key = "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"
 
-def gpt_baseline_search(guidelines, requirements, model_name="gpt-4"):
-    """
-    Perform semantic search using GPT as the baseline.
+def gpt_baseline_search(guidelines, sentences, model_name="gpt-4o-mini"):
+    M, N = len(sentences), len(guidelines)
+    matching_matrix = np.zeros((M, N))
 
-    Args:
-        guidelines (list): List of guideline texts (queries).
-        requirements (list): List of requirement texts (corpus).
-        model_name (str): The GPT model to use for semantic search.
-
-    Returns:
-        list: List of dictionaries containing query and matched results.
-    """
-    results = []
-
-    # Iterate over each guideline and find top matches in requirements
-    for guideline in guidelines:
-        print(f"Processing guideline: {guideline[:50]}...")  # Display progress
+    # Iterate over each sentence and find top matches in guidelines
+    for i, sentence in enumerate(sentences):
+        print(f"Processing sentence: {sentence[:50]}...")  # Display progress
         messages = [
-            {"role": "system", "content": "You are a helpful assistant trained for matching guidelines with requirements."},
-            {"role": "user", "content": f"Guideline: {guideline}\nRequirements: {requirements}\nFind the most relevant requirements to the guideline and rank them."}
+            {"role": "system", "content": "You are a helpful assistant trained for matching sentences with guidelines."},
+            {"role": "user", "content": f"Sentence: {sentence}\nGuidelines: {guidelines}\nFind the most relevant guidelines to the sentence and rank them."}
         ]
 
         # Call OpenAI API
@@ -48,9 +40,15 @@ def gpt_baseline_search(guidelines, requirements, model_name="gpt-4"):
             print(f"Error parsing GPT output: {e}")
             matches = []
 
-        results.append({"query": guideline, "matches": matches})
+        for idx, match in enumerate(matches):
+            closest_match = difflib.get_close_matches(match, guidelines, n=1, cutoff=0.9)
+            try:
+                guideline_index = guidelines.index(closest_match[0])
+                matching_matrix[i][guideline_index] = 1 - idx * 0.01
+            except ValueError:
+                print(f"nothing match: {match}.")
 
-    return results
+    return matching_matrix
 
 
 def run_baseline(file_path_excel, file_paths_csv, result_path, model_name="gpt-4", top_k=10):
