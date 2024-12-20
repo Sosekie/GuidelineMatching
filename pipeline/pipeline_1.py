@@ -1,6 +1,7 @@
 import os
 import pickle
 import pandas as pd
+import numpy as np
 from time import time
 from sentence_transformers import SentenceTransformer, util
 from pipeline.data_processing import load_and_process_data, ensure_directories_exist
@@ -22,20 +23,16 @@ def semantic_search_global(input_queries, corpus_embeddings, corpus_texts, model
     """
     # Encode the input queries
     query_embeddings = model.encode(input_queries, convert_to_tensor=True, show_progress_bar=True)
+    hits = util.semantic_search(query_embeddings, corpus_embeddings, top_k=top_k)
 
-    # Perform semantic search
-    all_results = []
-    for query_idx, query_embedding in enumerate(query_embeddings):
-        hits = util.semantic_search(query_embedding, corpus_embeddings, top_k=top_k)[0]
+    M, N = len(input_queries), len(corpus_embeddings)
+    match_matrix = np.zeros((M, N))
+    
+    for idx, query_hits in enumerate(hits):
+        for hit in query_hits: 
+            match_matrix[idx][hit["corpus_id"]] = hit["score"]
 
-        # Collect results for this query
-        query_result = {
-            "query": input_queries[query_idx],
-            "matches": [{"score": float(hit["score"]), "text": corpus_texts[hit["corpus_id"]]} for hit in hits]
-        }
-        all_results.append(query_result)
-
-    return all_results
+    return match_matrix
 
 
 def generate_embeddings(model, requirements, guidelines, embedding_cache_path, batch_size=32):
@@ -78,7 +75,7 @@ def generate_embeddings(model, requirements, guidelines, embedding_cache_path, b
     return requirement_embeddings, guideline_embeddings
 
 
-def run_pipeline_1(file_path_excel, file_paths_csv, embedding_cache_path, result_path, top_k=10):
+def run_pipeline_1(file_path_excel, file_paths_csv, embedding_cache_path, result_path):
     """
     Run Pipeline 1 for semantic search.
 
@@ -87,7 +84,6 @@ def run_pipeline_1(file_path_excel, file_paths_csv, embedding_cache_path, result
         file_paths_csv (list): List of CSV file paths containing requirements.
         embedding_cache_path (str): Path to cache embeddings.
         result_path (str): Path to save results.
-        top_k (int): Number of top matches to retrieve.
 
     Returns:
         None
@@ -113,17 +109,10 @@ def run_pipeline_1(file_path_excel, file_paths_csv, embedding_cache_path, result
     # Perform global semantic search
     print("Performing semantic search...")
     start_time = time()
-    search_results = semantic_search_global(guidelines, requirement_embeddings, requirements, model, top_k=top_k)
+    match_matrix = semantic_search_global(guidelines, requirement_embeddings, requirements, model, top_k=top_k)
     elapsed_time = time() - start_time
     print(f"Semantic search completed in {elapsed_time:.2f} seconds.")
 
-    # Save results to CSV
-    results_list = []
-    for result in search_results:
-        query = result["query"]
-        for match in result["matches"]:
-            results_list.append({"query": query, "matched_text": match["text"], "score": match["score"]})
-
-    results_df = pd.DataFrame(results_list)
-    results_df.to_csv(result_path, index=False)
-    print(f"Results saved to '{result_path}'.")
+    # 保存为 .npy 文件
+    np.save(result_path, match_matrix)
+    print(f"Matrix saved to {result_path}")
