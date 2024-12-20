@@ -41,12 +41,15 @@ def gpt_baseline_search(guidelines, sentences, model_name="gpt-4o-mini"):
             matches = []
 
         for idx, match in enumerate(matches):
-            closest_match = difflib.get_close_matches(match, guidelines, n=1, cutoff=0.9)
-            try:
-                guideline_index = guidelines.index(closest_match[0])
-                matching_matrix[i][guideline_index] = 1 - idx * 0.01
-            except ValueError:
-                print(f"nothing match: {match}.")
+            closest_match = difflib.get_close_matches(match, guidelines, n=1, cutoff=0.5)
+            if len(closest_match) == 0:
+                print(f"no match: {match}")
+            else: 
+                try:
+                    guideline_index = guidelines.index(closest_match[0])
+                    matching_matrix[i][guideline_index] = 1 - idx * 0.01
+                except ValueError:
+                    print(f"ValueError: {match}.")
 
     return matching_matrix
 

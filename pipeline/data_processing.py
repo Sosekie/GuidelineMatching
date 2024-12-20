@@ -17,7 +17,7 @@ def load_and_process_data(excel_path, csv_path):
     """
     # Load Excel data
     data = pd.read_excel(excel_path, usecols=["Ausschreibungskriterium"])
-    guidelines = data["Ausschreibungskriterium"].dropna().astype(str).tolist()
+    guidelines = data["Ausschreibungskriterium"].dropna().drop_duplicates().astype(str).tolist()
 
     # Load and combine CSV data
     data = pd.read_csv(csv_path, usecols=["sentence"])

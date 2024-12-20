@@ -75,7 +75,7 @@ def generate_embeddings(model, requirements, guidelines, embedding_cache_path, b
     return requirement_embeddings, guideline_embeddings
 
 
-def run_pipeline_1(file_path_excel, file_paths_csv, embedding_cache_path, result_path):
+def run_pipeline_1(file_path_excel, file_paths_csv, embedding_cache_path, result_path, top_k=20):
     """
     Run Pipeline 1 for semantic search.
 
