@@ -4,31 +4,30 @@ import time
 import os
 import pickle
 import numpy as np
-from sentence_transformers import SentenceTransformer, CrossEncoder, util
-from pipeline.data_processing import load_and_process_data, ensure_directories_exist
+import statistics
+import csv
+
+from sentence_transformers import SentenceTransformer, util
+from data_processing import load_and_process_data, ensure_directories_exist
+
+import nest_asyncio
+nest_asyncio.apply()
+
+# ----------------------
+# 以下是你的原有代码部分
+# ----------------------
 
 # Set the API client
 client = openai.AsyncOpenAI(
-    api_key = "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"
+    api_key="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"
 )
 
 with open('prompts/prompt_system.txt', 'r', encoding='utf-8') as file:
     system_content = file.read()
 
-
 def bi_encoder_retrieve(model, queries, corpus_embeddings, corpus_texts, top_k=10):
     """
     Perform retrieval using a Bi-Encoder.
-
-    Args:
-        model (SentenceTransformer): Bi-Encoder model for semantic search.
-        queries (list): List of input queries.
-        corpus_embeddings (tensor): Precomputed embeddings of the corpus.
-        corpus_texts (list): Corresponding texts of the corpus embeddings.
-        top_k (int): Number of top matches to retrieve.
-
-    Returns:
-        list: List of dictionaries containing top-k results for each query.
     """
     query_embeddings = model.encode(queries, convert_to_tensor=True, show_progress_bar=True)
     hits = util.semantic_search(query_embeddings, corpus_embeddings, top_k=top_k)
@@ -46,7 +45,6 @@ def bi_encoder_retrieve(model, queries, corpus_embeddings, corpus_texts, top_k=1
 
 
 def get_gpt_result(response_content):
-
     for char in reversed(response_content[-20:]):
         if char == '"':  # stop when meet "
             return 0
@@ -94,7 +92,7 @@ async def batched_requests(tasks, batch_size):
     return results
 
 
-async def main(sentences, guidelines, bi_matrix, model_name):
+async def main_async(sentences, guidelines, bi_matrix, model_name):
     """
     根据 bi_matrix 的条件筛选参与 fetch_response 的任务，并更新矩阵
     """
@@ -122,13 +120,14 @@ async def main(sentences, guidelines, bi_matrix, model_name):
     return matrix
 
 
-# 运行程序
 def run_pipeline_3(file_path_excel, file_paths_csv, embedding_cache_path, result_path, gpt_model_name):
-
+    """
+    执行 Pipeline 3，对应 p3_matching_matrix.npy
+    """
     # Ensure directories exist
     ensure_directories_exist(["embedding", "result"])
 
-    # Load models
+    # Load model
     bi_encoder = SentenceTransformer("multi-qa-MiniLM-L6-cos-v1")
 
     # Load and process data
@@ -157,12 +156,15 @@ def run_pipeline_3(file_path_excel, file_paths_csv, embedding_cache_path, result
     print("Performing Bi-Encoder retrieval...")
     start_time = time.time()
     bi_matrix = bi_encoder_retrieve(bi_encoder, sentences, corpus_embeddings, guidelines, top_k=20)
-    print(f"Bi-Encoder retrieval completed in {time.time() - start_time:.2f} seconds.")
+    bi_elapsed_time = time.time() - start_time
+    print(f"Bi-Encoder retrieval completed in {bi_elapsed_time:.2f} seconds.")
 
     print("Performing gpt re-ranking...")
     start_time = time.time()
-    matching_matrix = asyncio.run(main(sentences, guidelines, bi_matrix, gpt_model_name))
-    print(f"gpt re-ranking completed in {time.time() - start_time:.2f} seconds.")
+    # 由于是异步，需要用 asyncio.run() 调用
+    matching_matrix = asyncio.run(main_async(sentences, guidelines, bi_matrix, gpt_model_name))
+    gpt_elapsed_time = time.time() - start_time
+    print(f"gpt re-ranking completed in {gpt_elapsed_time:.2f} seconds.")
 
     # 保存为 .npy 文件
     np.save(result_path, matching_matrix)
@@ -170,3 +172,65 @@ def run_pipeline_3(file_path_excel, file_paths_csv, embedding_cache_path, result
 
     print("Final Matrix:")
     print(matching_matrix)
+
+
+def main():
+    # ====== 这里开始做 3 次重复实验 ======
+    file_path_excel = "2024-09-27_Food_Waren-und_Dienstleistungsgruppe_V_4.0.xlsx"
+    file_paths_csv = "grouped_result.csv"
+    embedding_cache_path = "embedding/Pipeline_3_embeddings_cache.pkl"
+
+    # gpt 模型
+    model_name = "gpt-4o-mini"  # 你自己的 GPT 模型名称
+
+    repetition = 3
+    time_list = []
+
+    for run_idx in range(1, repetition + 1):
+        print(f"===== Pipeline 3: Run {run_idx}/{repetition} =====")
+
+        # 如果想让三次都重新生成 embedding，可以注释取消此行
+        # if os.path.exists(embedding_cache_path):
+        #     os.remove(embedding_cache_path)
+        #     print("Removed cache to re-generate embeddings each run.")
+
+        # 保存结果时带上 run_idx
+        result_path = f"result/p3_matching_matrix_{run_idx}.npy"
+
+        start_time = time.time()
+        run_pipeline_3(
+            file_path_excel=file_path_excel,
+            file_paths_csv=file_paths_csv,
+            embedding_cache_path=embedding_cache_path,
+            result_path=result_path,
+            gpt_model_name=model_name
+        )
+        end_time = time.time()
+
+        elapsed_time = end_time - start_time
+        time_list.append(elapsed_time)
+        print(f"[Run {run_idx}] 总耗时: {elapsed_time:.3f} 秒\n")
+
+    # 统计三次的平均时间和标准差
+    mean_time = statistics.mean(time_list)
+    std_time = statistics.pstdev(time_list)  # 若想用样本标准差也可
+
+    # 格式化 "xx.xxx±xx.xxx"
+    time_summary_str = f"{mean_time:.3f}±{std_time:.3f}"
+
+    # 写 CSV
+    ensure_directories_exist(["result"])
+    time_csv_path = "result/p3_time.csv"
+    with open(time_csv_path, mode="w", newline='', encoding="utf-8-sig") as f:
+        writer = csv.writer(f)
+        writer.writerow(["Run1", "Run2", "Run3"])
+        writer.writerow(time_list)
+        writer.writerow(["mean±std", time_summary_str])
+
+    print(f"三次运行时间: {time_list}")
+    print(f"平均时间±标准差: {time_summary_str}")
+    print(f"已写入 {time_csv_path}")
+
+
+if __name__ == "__main__":
+    main()

@@ -5,7 +5,7 @@ def main():
     file_path_excel = "2024-09-27_Food_Waren-und_Dienstleistungsgruppe_V_4.0.xlsx"
     file_paths_csv = "grouped_result.csv"
     result_path = "result/p4_matching_matrix.npy"
-    embedding_cache_path = "embedding/Pipeline_2_embeddings_cache.pkl"
+    embedding_cache_path = "embedding/Pipeline_4_embeddings_cache.pkl"
 
     # Set hyperparameters
     model_name = "gpt-4o-mini"  # Specify GPT model
